@@ -33,9 +33,9 @@ int main() {
   double sensor_range = 50;  // Sensor range [m]
 
   // GPS measurement uncertainty [x [m], y [m], theta [rad]]
-  double sigma_pos [3] = {0.3, 0.3, 0.01};
+  double sigma_pos[3] = {0.3, 0.3, 0.01};
   // Landmark measurement uncertainty [x [m], y [m]]
-  double sigma_landmark [2] = {0.3, 0.3};
+  double sigma_landmark[2] = {0.3, 0.3};
 
   // Read map data
   Map map;
@@ -47,8 +47,8 @@ int main() {
   // Create particle filter
   ParticleFilter pf;
 
-  h.onMessage([&pf,&map,&delta_t,&sensor_range,&sigma_pos,&sigma_landmark]
-              (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
+  h.onMessage([&pf, &map, &delta_t, &sensor_range, &sigma_pos, &sigma_landmark]
+              (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -60,7 +60,7 @@ int main() {
         auto j = json::parse(s);
 
         string event = j[0].get<string>();
-        
+
         if (event == "telemetry") {
           // j[1] is the data JSON object
           if (!pf.initialized()) {
@@ -71,7 +71,7 @@ int main() {
 
             pf.init(sense_x, sense_y, sense_theta, sigma_pos);
           } else {
-            // Predict the vehicle's next state from previous 
+            // Predict the vehicle's next state from previous
             //   (noiseless control) data.
             double previous_velocity = std::stod(j[1]["previous_velocity"].get<string>());
             double previous_yawrate = std::stod(j[1]["previous_yawrate"].get<string>());
